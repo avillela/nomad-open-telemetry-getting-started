@@ -1,5 +1,6 @@
-# This example configures a basic OTel Collector to receive traces over OTLP, and ships them
-# to Lighstep, Honeycomb, and Datadog
+# This example configures a basic OTel Collector with Traefik.
+# It receives traces over OTLP, and ships them to Lighstep, Honeycomb, and Datadog
+# API keys/tokens are retrieved from Vault.
 
 job_type = "service"
 
@@ -11,6 +12,11 @@ task_config = {
     DD_SERVICE_NAME = "my-dd-service"
     DD_TAG = "env:local_dev_env"
   }
+}
+
+vault_config = {
+  enabled = true
+  policies  = ["otel"]
 }
 
 config_yaml = <<EOH
