@@ -90,6 +90,17 @@ variable "vault_config" {
   }
 }
 
+variable "traefik_config" {
+  description = "Traefik configurations for the OpenTelemetry Collector"
+  type = object({
+    enabled       = bool
+  })
+  default = {
+    enabled = false
+    http_host = "otel-collector-http.myhost.com"
+  }
+}
+
 variable "network_config" {
   description = "The OpenTelemetry Collector network configuration options."
   type = object({

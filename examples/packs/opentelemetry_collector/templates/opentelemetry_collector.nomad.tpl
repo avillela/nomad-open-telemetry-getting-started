@@ -37,6 +37,12 @@ job [[ template "full_job_name" . ]] {
 
       config {
         image = "[[ $vars.task_config.image ]]:[[ $vars.task_config.version ]]"
+        force_pull = true
+        entrypoint = [
+          "/otelcontribcol",
+          "--config=local/config/otel-collector-config.yaml",
+        ]
+
 
         [[- if $vars.privileged_mode ]]
         pid_mode   = "host"
@@ -45,12 +51,12 @@ job [[ template "full_job_name" . ]] {
 
         ports = [[ keys $vars.network_config.ports | toPrettyJson ]]
 
-        volumes = [
-          "local/otel/config.yaml:/etc/otel/config.yaml",
-          [[- if $vars.privileged_mode ]]
-          "/:/hostfs:ro,rslave",
-          [[- end ]]
-        ]
+        # volumes = [
+        #   "local/otel/config.yaml:/etc/otel/config.yaml",
+        #   [[- if $vars.privileged_mode ]]
+        #   "/:/hostfs:ro,rslave",
+        #   [[- end ]]
+        # ]
       }
 
       [[ template "env_vars" . ]]
@@ -73,6 +79,9 @@ EOH
 
       [[- if $vars.task_services ]]
       [[- range $idx, $service := $vars.task_services ]]
+      [[- if $vars.traefik_config.enabled ]]
+      [[- if not (eq $service.service_port_label "otlphttp") ]]
+      [[- if not (eq $service.service_port_label "otlp") ]]
       service {
         name = [[ $service.service_name | quote ]]
         port = [[ $service.service_port_label | quote ]]
@@ -88,6 +97,11 @@ EOH
       }
       [[- end ]]
       [[- end ]]
+      [[- end ]]
+      [[- end ]]
+      [[- end ]]
+
+      [[ template "traefik_config" . ]]
     }
   }
 }

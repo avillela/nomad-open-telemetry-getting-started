@@ -14,9 +14,16 @@ task_config = {
   }
 }
 
+# Override vault config in vars file
 vault_config = {
   enabled = true
   policies  = ["otel"]
+}
+
+# Traefik config
+traefik_config = {
+  enabled = true
+  http_host = "otel-collector-http.localhost"
 }
 
 config_yaml = <<EOH
