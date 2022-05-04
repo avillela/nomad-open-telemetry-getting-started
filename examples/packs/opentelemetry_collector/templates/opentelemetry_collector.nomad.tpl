@@ -40,7 +40,7 @@ job [[ template "full_job_name" . ]] {
         force_pull = true
         entrypoint = [
           "/otelcontribcol",
-          "--config=local/otel/config.yaml",
+          "--config=[[ $vars.config_yaml_location ]]",
         ]
 
 
@@ -53,7 +53,7 @@ job [[ template "full_job_name" . ]] {
 
         [[ if $vars.use_volumes ]]
         volumes = [
-          "local/otel/config.yaml:/etc/otel/config.yaml",
+          "[[ $vars.config_yaml_location ]]:/etc/otel/config.yaml",
           [[- if $vars.privileged_mode ]]
           "/:/hostfs:ro,rslave",
           [[- end ]]
@@ -70,7 +70,7 @@ job [[ template "full_job_name" . ]] {
 EOH
 
         change_mode   = "restart"
-        destination = "local/otel/config.yaml"
+        destination = "[[ $vars.config_yaml_location ]]"
       }
 
       [[ template "additional_templates" . ]]

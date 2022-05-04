@@ -140,6 +140,12 @@ variable "resources" {
   }
 }
 
+variable "config_yaml_location" {
+  description = "The locaiton of otel-collector-config.yaml in the container instance"
+  type        = string
+  default     = "local/otel/config.yaml"
+}
+
 variable "config_yaml" {
   description = "The OpenTelemetry Collector configuration to pass to the task."
   type        = string
