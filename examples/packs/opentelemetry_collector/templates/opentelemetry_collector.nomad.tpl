@@ -17,7 +17,7 @@ job [[ template "full_job_name" . ]] {
   }
   [[- end ]][[- end ]]
 
-  group "opentelemetry_collector" {
+  group "otel-collector" {
     [[- if eq $vars.job_type "service" ]]
     count = [[ $vars.instance_count ]]
     [[- end ]]
@@ -32,7 +32,7 @@ job [[ template "full_job_name" . ]] {
 
     [[ template "vault_config" . ]]
 
-    task "opentelemetry_collector" {
+    task "otel-collector" {
       driver = "docker"
 
       config {
@@ -67,7 +67,7 @@ job [[ template "full_job_name" . ]] {
 EOH
 
         change_mode   = "restart"
-        destination   = "local/otel/config.yaml"
+        destination = "local/config/otel-collector-config.yaml"
       }
 
       [[ template "additional_templates" . ]]

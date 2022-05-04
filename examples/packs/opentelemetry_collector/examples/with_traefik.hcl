@@ -4,9 +4,11 @@
 
 job_type = "service"
 
+job_name = "otel-collector"
+
 task_config = {
   image   = "otel/opentelemetry-collector-contrib"
-  version = "0.50.0"
+  version = "0.40.0"
   env = {
     HNY_DATASET_NAME = "my-hny-dataset"
     DD_SERVICE_NAME = "my-dd-service"
@@ -39,9 +41,7 @@ processors:
   batch:
     timeout: 10s
   memory_limiter:
-    # 75% of maximum memory up to 4G
     limit_mib: 1536
-    # 25% of limit up to 2G
     spike_limit_mib: 512
     check_interval: 5s
 
