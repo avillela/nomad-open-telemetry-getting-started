@@ -80,8 +80,8 @@ EOH
       [[- if $vars.task_services ]]
       [[- range $idx, $service := $vars.task_services ]]
       [[- if $vars.traefik_config.enabled ]]
-      [[- if not (eq $service.service_port_label "otlphttp") ]]
-      [[- if not (eq $service.service_port_label "otlp") ]]
+      [[- if ne $service.service_port_label "otlphttp" ]]
+      [[- if ne $service.service_port_label "otlp" ]]
       service {
         name = [[ $service.service_name | quote ]]
         port = [[ $service.service_port_label | quote ]]
