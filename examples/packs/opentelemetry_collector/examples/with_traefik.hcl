@@ -1,6 +1,7 @@
 # This example configures a basic OTel Collector with Traefik.
 # It receives traces over OTLP, and ships them to Lighstep, Honeycomb, and Datadog
-# API keys/tokens are retrieved from Vault.
+# API keys/tokens for each Observability platform are retrieved from HashiCorp Vault.
+# NOTE: You need to have accounts in each of these platforms in order for this to work.
 
 job_type = "service"
 
@@ -10,11 +11,13 @@ task_config = {
   image   = "otel/opentelemetry-collector-contrib"
   version = "0.40.0"
   env = {
-    HNY_DATASET_NAME = "my-hny-dataset"
-    DD_SERVICE_NAME = "my-dd-service"
-    DD_TAG = "env:local_dev_env"
+    HONEYCOMB_DATASET = "my-hny-dataset"
+    DATADOG_SERVICE_NAME = "my-dd-service"
+    DATADOG_TAG_NAME = "env:local_dev_env"
   }
 }
+
+use_volumes = false
 
 # Override vault config in vars file
 vault_config = {
@@ -53,16 +56,16 @@ exporters:
     endpoint: "api.honeycomb.io:443"
     headers: 
       "x-honeycomb-team": "{{ with secret "kv/data/otel/o11y/honeycomb" }}{{ .Data.data.api_key }}{{ end }}"
-      "x-honeycomb-dataset": "$HNY_DATASET_NAME"
+      "x-honeycomb-dataset": "$HONEYCOMB_DATASET"
   otlp/ls:
     endpoint: ingest.lightstep.com:443
     headers: 
       "lightstep-access-token": "{{ with secret "kv/data/otel/o11y/lightstep" }}{{ .Data.data.api_key }}{{ end }}"
 
   datadog:
-    service: $DD_SERVICE_NAME
+    service: $DATADOG_SERVICE_NAME
     tags:
-      - $DD_TAG
+      - $DATADOG_TAG_NAME
     api:
       key: "{{ with secret "kv/data/otel/o11y/datadog" }}{{ .Data.data.api_key }}{{ end }}"
       site: datadoghq.com
