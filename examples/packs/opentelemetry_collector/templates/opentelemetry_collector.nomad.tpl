@@ -39,7 +39,7 @@ job [[ template "full_job_name" . ]] {
         image = "[[ $vars.task_config.image ]]:[[ $vars.task_config.version ]]"
         force_pull = true
         entrypoint = [
-          "/otelcontribcol",
+          "/otelcol-contrib",
           "--config=[[ $vars.config_yaml_location ]]",
         ]
 

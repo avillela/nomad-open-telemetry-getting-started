@@ -9,7 +9,7 @@ job_name = "otel-collector"
 
 task_config = {
   image   = "otel/opentelemetry-collector-contrib"
-  version = "0.40.0"
+  version = "0.50.0"
   env = {
     HONEYCOMB_DATASET = "my-hny-dataset"
     DATADOG_SERVICE_NAME = "my-dd-service"
